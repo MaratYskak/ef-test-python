@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.db import models
+import secrets
 
 
 class UserManager(BaseUserManager):
@@ -61,3 +62,35 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+class AuthToken(models.Model):
+
+    key = models.CharField(
+        max_length=255,
+        unique=True
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='tokens'
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    expires_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    def save(self, *args, **kwargs):
+
+        if not self.key:
+            self.key = secrets.token_hex(32)
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f'{self.user.email} - {self.key}'
