@@ -55,5 +55,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     REQUIRED_FIELDS = []
 
+    @property
+    def roles(self):
+        return [user_role.role for user_role in self.user_roles.all()]
+
     def __str__(self):
         return self.email
