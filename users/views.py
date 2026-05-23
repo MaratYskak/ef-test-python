@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from rest_framework.permissions import IsAuthenticated
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -83,4 +84,19 @@ class LoginView(APIView):
                 'token': token.key
             },
             status=status.HTTP_200_OK
+        )
+    
+class ProfileView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+
+        return Response(
+            {
+                'id': request.user.id,
+                'email': request.user.email,
+                'first_name': request.user.first_name,
+                'last_name': request.user.last_name,
+            }
         )
