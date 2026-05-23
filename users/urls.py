@@ -1,5 +1,5 @@
 from django.urls import path
-from users.views import ProfileView
+from users.views import LogoutView, ProfileView, SoftDeleteUserView
 
 from users.views import (
     LoginView,
@@ -24,5 +24,17 @@ urlpatterns = [
         'profile/',
         ProfileView.as_view(),
         name='profile'
-),
+    ),
+
+    path(
+        'logout/',
+        LogoutView.as_view(),
+        name='logout'
+    ),
+    
+    path(
+        'soft-delete/',
+        SoftDeleteUserView.as_view(),
+        name='soft-delete'
+    ),
 ]

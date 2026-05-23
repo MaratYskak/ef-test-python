@@ -100,3 +100,39 @@ class ProfileView(APIView):
                 'last_name': request.user.last_name,
             }
         )
+    
+class LogoutView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        request.auth.delete()
+
+        return Response(
+            {
+                'message': 'Logged out successfully'
+            },
+            status=status.HTTP_200_OK
+        )
+    
+class SoftDeleteUserView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request):
+
+        user = request.user
+
+        user.is_active = False
+
+        user.save()
+
+        user.tokens.all().delete()
+
+        return Response(
+            {
+                'message': 'User soft deleted'
+            },
+            status=status.HTTP_200_OK
+        )
