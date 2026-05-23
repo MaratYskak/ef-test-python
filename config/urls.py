@@ -8,4 +8,9 @@ urlpatterns = [
         'api/users/',
         include('users.urls')
     ),
+
+    path(
+        'api/access/',
+        include('access.urls')
+    ),
 ]
