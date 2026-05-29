@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'users',
     'access',
     'corsheaders',
+    'drf_spectacular',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -58,6 +59,10 @@ REST_FRAMEWORK = {
         'users.authentication.CustomTokenAuthentication',
     ],
 
+    'DEFAULT_SCHEMA_CLASS': (
+        'drf_spectacular.openapi.AutoSchema'
+    ),
+
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.UserRateThrottle',
         'rest_framework.throttling.AnonRateThrottle',
@@ -67,6 +72,19 @@ REST_FRAMEWORK = {
         'user': '100/minute',
         'anon': '20/minute',
     }
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Custom Auth RBAC API',
+
+    'DESCRIPTION': (
+        'Custom authentication and '
+        'authorization system with RBAC'
+    ),
+
+    'VERSION': '1.0.0',
+
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 MIDDLEWARE = [
